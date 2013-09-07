@@ -74,7 +74,7 @@ class TestUnicode(TestCase):
                                     object_hook = lambda x: None),
                          OrderedDict(p))
 
-    @unittest.skipIf(sys.platform == 'cli', 'http://ironpython.codeplex.com/workitem/32802')
+    # @unittest.skipIf(sys.platform == 'cli', 'http://ironpython.codeplex.com/workitem/32802')
     def test_default_encoding(self):
         self.assertEqual(json.loads(u'{"a": "\xe9"}'.encode('utf-8')),
             {'a': u'\xe9'})

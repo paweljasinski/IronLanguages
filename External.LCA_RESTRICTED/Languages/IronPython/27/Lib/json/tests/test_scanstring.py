@@ -18,6 +18,7 @@ class TestScanString(TestCase):
 
     @skipUnless(_json, 'test requires the _json module')
     def test_c_scanstring(self):
+        pass
 
     def _test_scanstring(self, scanstring):
         self.assertEqual(
