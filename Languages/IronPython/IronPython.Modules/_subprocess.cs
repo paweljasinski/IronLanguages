@@ -13,6 +13,7 @@
  *
  * ***************************************************************************/
 
+using System.Collections;
 #if FEATURE_PROCESS
 
 #if CLR2
@@ -76,7 +77,7 @@ namespace IronPython.Modules {
             object tSec /*subprocess.py passes None*/,
             int? bInheritHandles,
             uint? dwCreationFlags,
-            PythonDictionary lpEnvironment,
+            object lpEnvironment,
             string lpCurrentDirectory,
             object lpStartupInfo /* subprocess.py passes STARTUPINFO*/) {
 
@@ -116,8 +117,12 @@ namespace IronPython.Modules {
                  * there needs to be some conversion done here...*/
             }
 
+            var env = lpEnvironment as PythonDictionary;
+            if (env == null) {
+                env = new PythonDictionary(context, lpEnvironment);
+            }
             // If needed convert lpEnvironment Dictonary to lpEnvironmentIntPtr
-            string lpEnvironmentStr = EnvironmentToNative(lpEnvironment);
+            string lpEnvironmentStr = EnvironmentToNative(env);
 
             PROCESS_INFORMATION lpProcessInformation = new PROCESS_INFORMATION();
             bool result = CreateProcessPI(
