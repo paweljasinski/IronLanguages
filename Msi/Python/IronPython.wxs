@@ -24,6 +24,13 @@
           <netfx:NativeImage Id="ngen_ipy64.exe" Platform="all" AppBaseDirectory="INSTALLDIR"/>
         </File>
         <File Id="ipy64.exe.config" />
+        <ProgId Id='Python.File' Description='python file'>
+          <Extension Id='py' ContentType='text/plain'>
+            <Verb Id='open' Command='Open' TargetFile='ipy.exe' Argument='%1 %*' />
+          </Extension>
+        </ProgId>
+        <Environment Id="PATHEXT" Name="PATHEXT" Value=".PY" Permanent="no" Part="last" Action="set" System="yes" />
+        <Environment Id="PATH" Name="PATH" Value="[INSTALLDIR]" Permanent="no" Part="last" Action="set" System="yes" />
       </Component>
 
       <Component Guid="{A9A13553-6EAD-4C92-9334-149F223F854C}">
