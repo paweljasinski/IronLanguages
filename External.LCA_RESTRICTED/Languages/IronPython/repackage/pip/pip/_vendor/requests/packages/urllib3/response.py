@@ -8,6 +8,7 @@
 import logging
 import zlib
 import io
+import sys
 
 from ._collections import HTTPHeaderDict
 from .exceptions import DecodeError
@@ -16,6 +17,8 @@ from .util import is_fp_closed
 
 
 log = logging.getLogger(__name__)
+
+IRON = sys.platform == 'cli'
 
 
 class DeflateDecoder(object):
@@ -46,7 +49,12 @@ class DeflateDecoder(object):
 
 def _get_decoder(mode):
     if mode == 'gzip':
-        return zlib.decompressobj(16 + zlib.MAX_WBITS)
+        if not IRON:
+            return zlib.decompressobj(16 + zlib.MAX_WBITS)
+        else:
+            # the zlib library is based on version 1.1.13 of zlib
+            # which does not support gzip wrapper
+            return zlib.decompressobj(-zlib.MAX_WBITS)
 
     return DeflateDecoder()
 
@@ -200,7 +208,13 @@ class HTTPResponse(io.IOBase):
 
             try:
                 if decode_content and self._decoder:
-                    data = self._decoder.decompress(data)
+                    if not IRON:
+                        data = self._decoder.decompress(data)
+                    else:
+                        # strip manually gzip header
+                        # if served by webserver, it appears to have a
+                        # constant size of 10
+                        data = self._decoder.decompress(data[10:])
             except (IOError, zlib.error) as e:
                 raise DecodeError(
                     "Received response with content-encoding: %s, but "
