@@ -6,7 +6,10 @@ import os
 import logging
 
 from pip import backwardcompat
-from pip._vendor import colorama, pkg_resources
+from pip._vendor import pkg_resources
+IRON = sys.platform == 'cli'
+if not IRON:
+    import colorama
 
 
 def _color_wrap(*colors):
@@ -16,6 +19,8 @@ def _color_wrap(*colors):
 
 
 def should_color(consumer, environ, std=(sys.stdout, sys.stderr)):
+    if IRON:
+        return False
     real_consumer = (consumer if not isinstance(consumer, colorama.AnsiToWin32)
                         else consumer.wrapped)
 
@@ -67,11 +72,12 @@ class Logger(object):
 
     LEVELS = [VERBOSE_DEBUG, DEBUG, INFO, NOTIFY, WARN, ERROR, FATAL]
 
-    COLORS = {
-        WARN: _color_wrap(colorama.Fore.YELLOW),
-        ERROR: _color_wrap(colorama.Fore.RED),
-        FATAL: _color_wrap(colorama.Fore.RED),
-    }
+    if not IRON:
+        COLORS = {
+            WARN: _color_wrap(colorama.Fore.YELLOW),
+            ERROR: _color_wrap(colorama.Fore.RED),
+            FATAL: _color_wrap(colorama.Fore.RED),
+        }
 
     def __init__(self):
         self.consumers = []
