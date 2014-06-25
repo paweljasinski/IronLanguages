@@ -436,5 +436,10 @@ script_cp35263.py:4: UserWarning: warning 1
     f.close()
     TestCommandLine(("-X:Tracing", "-X:FullFrames", scriptFileName,), expected, 0)
 
+def test_cp35322():
+    # the () are extra tuple to avoid space in argument
+    TestCommandLine(("-c", "\"print(__name__)\""), "__main__\n", 0)
+
+
 run_test(__name__)
 
