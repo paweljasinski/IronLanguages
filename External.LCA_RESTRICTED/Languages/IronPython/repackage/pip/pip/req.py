@@ -295,7 +295,7 @@ class InstallRequirement(object):
             logger.notify('Running setup.py (path:%s) egg_info for package from %s' % (self.setup_py, self.url))
         logger.indent += 2
         try:
-            save_cwd = os.getcwd()
+
             # if it's distribute>=0.7, it won't contain an importable
             # setuptools, and having an egg-info dir blocks the ability of
             # setup.py to find setuptools plugins, so delete the egg-info dir if
@@ -309,15 +309,7 @@ class InstallRequirement(object):
             script = self._run_setup_py
             script = script.replace('__SETUP_PY__', repr(self.setup_py))
             script = script.replace('__PKG_NAME__', repr(self.name))
-
-            os.chdir(self.source_dir)
-            # In ironpython exec trick does not work together with -c parameter
-            # Construct explicit script
-            help_script_name = "help-script-pip.py"
-            with open(help_script_name, "w") as tf:
-                tf.write(script)
-
-            egg_info_cmd = [sys.executable, help_script_name, 'egg_info']
+            egg_info_cmd = [sys.executable, '-c', script, 'egg_info']
             # We can't put the .egg-info files at the root, because then the source code will be mistaken
             # for an installed egg, causing problems
             if self.editable or force_root_egg_info:
@@ -327,7 +319,6 @@ class InstallRequirement(object):
                 if not os.path.exists(egg_info_dir):
                     os.makedirs(egg_info_dir)
                 egg_base_option = ['--egg-base', 'pip-egg-info']
-
             call_subprocess(
                 egg_info_cmd + egg_base_option,
                 cwd=self.source_dir, filter_stdout=self._filter_install, show_stdout=False,
@@ -335,12 +326,6 @@ class InstallRequirement(object):
                 command_desc='python setup.py egg_info')
         finally:
             logger.indent -= 2
-            try:
-                os.unlink(help_script_name)
-            except:
-                pass
-            os.chdir(save_cwd)
-
         if not self.req:
             self.req = pkg_resources.Requirement.parse(
                 "%(Name)s==%(Version)s" % self.pkg_info())
@@ -691,16 +676,11 @@ exec(compile(getattr(tokenize, 'open', open)(__file__).read().replace('\\r\\n', 
         temp_location = tempfile.mkdtemp('-record', 'pip-')
         record_filename = os.path.join(temp_location, 'install-record.txt')
         try:
-            save_cwd = os.getcwd()
-            os.chdir(self.source_dir)
-            help_script_name = "help-script-pip.py"
             install_args = [sys.executable]
-            install_args.append(help_script_name)
-            with open(help_script_name, "w") as tf:
-                tf.write(
+            install_args.append('-c')
+            install_args.append(
             "import setuptools, tokenize;__file__=%r;"\
             "exec(compile(getattr(tokenize, 'open', open)(__file__).read().replace('\\r\\n', '\\n'), __file__, 'exec'))" % self.setup_py)
-
             install_args += list(global_options) + ['install','--record', record_filename]
 
             if not self.as_egg:
@@ -727,11 +707,6 @@ exec(compile(getattr(tokenize, 'open', open)(__file__).read().replace('\\r\\n', 
                     cwd=self.source_dir, filter_stdout=self._filter_install, show_stdout=False)
             finally:
                 logger.indent -= 2
-                try:
-                    os.unlink(help_script_name)
-                except:
-                    pass
-                os.chdir(save_cwd)
             if not os.path.exists(record_filename):
                 logger.notify('Record file %s not found' % record_filename)
                 return
