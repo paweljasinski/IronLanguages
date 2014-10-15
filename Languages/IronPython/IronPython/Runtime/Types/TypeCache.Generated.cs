@@ -29,6 +29,38 @@ using Complex = Microsoft.Scripting.Math.Complex64;
 
 namespace IronPython.Runtime.Types {
     public static class TypeCache {
+        public static void Done() {
+        array = null;
+        builtinfunction = null;
+        pythondictionary = null;
+        frozensetcollection = null;
+        pythonfunction = null;
+        builtin = null;
+        obj = null;
+        setcollection = null;
+        pythontype = null;
+        str = null;
+        pythontuple = null;
+        weakreference = null;
+        list = null;
+        pythonfile = null;
+        pythonmodule = null;
+        method = null;
+        enumerate = null;
+        intType = null;
+        singleType = null;
+        doubleType = null;
+        biginteger = null;
+        complex = null;
+        super = null;
+        oldclass = null;
+        oldinstance = null;
+        nullType = null;
+        boolType = null;
+        baseException = null;
+
+        }
+
         #region Generated TypeCache Storage
 
         // *** BEGIN GENERATED CODE ***

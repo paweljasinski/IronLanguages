@@ -120,9 +120,15 @@ type(name, bases, dict) -> creates a new type instance with the given name, base
         /// </summary>
         private static Dictionary<Type, BuiltinFunction> _userTypeCtors = new Dictionary<Type, BuiltinFunction>();
 
+        public static void Done() {
+            _pythonTypes.Clear();
+            // __dict__ = null;
+            // _pythonTypeType = null;
+
+        }
 
         /// <summary>
-        /// Creates a new type for a user defined type.  The name, base classes (a tuple of type
+        /// __reates a new type for a user defined type.  The name, base classes (a tuple of type
         /// objects), and a dictionary of members is provided.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]

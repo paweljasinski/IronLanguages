@@ -57,6 +57,10 @@ namespace IronPython.Runtime {
             }
         }
 
+        private ExtensionMethodSet() {
+            _loadedAssemblies = new Dictionary<Assembly, AssemblyLoadInfo>();
+        }
+
         public BindingRestrictions GetRestriction(Expression codeContext) {
             BindingRestrictions extCheck;
             if (_id == ExtensionMethodSet.OutOfIds) {
@@ -77,10 +81,6 @@ namespace IronPython.Runtime {
                 );
             }
             return extCheck;
-        }
-
-        private ExtensionMethodSet() {
-            _loadedAssemblies = new Dictionary<Assembly, AssemblyLoadInfo>();
         }
 
         /// <summary>
@@ -332,12 +332,12 @@ namespace IronPython.Runtime {
 
         public PythonExtensionBinder GetBinder(PythonContext/*!*/ context) {
             Debug.Assert(context != null);
-
-            if (_extBinder == null) {
-                _extBinder = new PythonExtensionBinder(context.Binder, this);
+            if (this == Empty) {
+                return context.emptyExtensionBinder ??
+                       (context.emptyExtensionBinder = new PythonExtensionBinder(context.Binder, this));
             }
 
-            return _extBinder;
+            return _extBinder ?? (_extBinder = new PythonExtensionBinder(context.Binder, this));
         }
 
         private static Dictionary<Assembly, AssemblyLoadInfo> NewInfoOrCopy(ExtensionMethodSet/*!*/ existingSet) {

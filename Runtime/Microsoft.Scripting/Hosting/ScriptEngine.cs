@@ -54,6 +54,10 @@ namespace Microsoft.Scripting.Hosting {
             _language = context;
         }
 
+        public void Done() {
+            _language.Done();
+        }
+
         #region Object Operations
 
         /// <summary>

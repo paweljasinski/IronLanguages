@@ -66,6 +66,25 @@ namespace IronPython.Runtime.Exceptions {
         internal const string DefaultExceptionModule = "exceptions";
         public const string __doc__ = "Provides the most commonly used exceptions for Python programs";
         
+        public static void Done() {
+            AttributeErrorStorage = null;
+            BytesWarningStorage = null;
+            EnvironmentErrorStorage = null;
+            ExceptionStorage = null;
+            ImportErrorStorage = null;
+            ImportWarningStorage = null;
+            KeyErrorStorage = null;
+            KeyboardInterruptStorage = null;
+            NameErrorStorage = null;
+            OSErrorStorage = null;
+            PendingDeprecationWarningStorage = null;
+            StandardErrorStorage = null;
+            StopIterationStorage = null;
+            TypeErrorStorage = null;
+            WarningStorage = null;
+            WindowsErrorStorage = null;
+        }
+
         /// <summary>
         /// Base class for all Python exception objects.
         /// 

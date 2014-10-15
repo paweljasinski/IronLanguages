@@ -78,6 +78,10 @@ namespace IronPython.Runtime.Binding {
             _registeredInterfaceExtensions = binder._registeredInterfaceExtensions;
         }
 
+        public PythonBinder() {
+
+        }
+
         public override Expression/*!*/ ConvertExpression(Expression/*!*/ expr, Type/*!*/ toType, ConversionResultKind kind, OverloadResolverFactory factory) {
             ContractUtils.RequiresNotNull(expr, "expr");
             ContractUtils.RequiresNotNull(toType, "toType");

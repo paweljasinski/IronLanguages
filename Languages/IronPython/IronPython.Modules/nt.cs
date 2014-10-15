@@ -49,6 +49,11 @@ namespace IronPython.Modules {
         private static int _processCount;
 #endif
 
+
+        public static void DoneDoneDone() {
+            error = null;
+        }
+
         #region Public API Surface
 
 #if FEATURE_PROCESS
@@ -216,7 +221,7 @@ namespace IronPython.Modules {
 #endif
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
-        public static readonly PythonType error = Builtin.OSError;
+        public static PythonType error = Builtin.OSError;
 
         public static void _exit(CodeContext/*!*/ context, int code) {
             PythonContext.GetContext(context).DomainManager.Platform.TerminateScriptExecution(code);

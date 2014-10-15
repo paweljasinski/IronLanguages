@@ -376,6 +376,20 @@ namespace Microsoft.Scripting.Hosting {
             _manager.LoadAssembly(assembly);
         }
 
+        public void Done() {
+            foreach (var asm in _manager.GetLoadedAssemblyList()) {
+                foreach (var t in asm.GetExportedTypes()) {
+                    // Console.WriteLine("type:"+ t);
+                    var methodInfo = t.GetMethod("DoneDoneDone", new Type[] {});
+                    if (methodInfo != null) {
+                        Console.WriteLine("found DoneDoneDone");
+                        methodInfo.Invoke(null, null);
+                        Console.WriteLine("back from DoneDoneDoen");
+                    }
+                }
+            }
+        }
+
         public ObjectOperations Operations {
             get {
                 return InvariantEngine.Operations;

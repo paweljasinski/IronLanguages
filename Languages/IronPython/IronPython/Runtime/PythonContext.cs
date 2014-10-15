@@ -13,6 +13,7 @@
  *
  * ***************************************************************************/
 
+using System.Runtime.Remoting.Contexts;
 #if FEATURE_CORE_DLR
 using System.Linq.Expressions;
 #else
@@ -148,7 +149,7 @@ namespace IronPython.Runtime {
         private ClrModule.ReferencesList _referencesList;
         private FloatFormat _floatFormat, _doubleFormat;
         private CultureInfo _collateCulture, _ctypeCulture, _timeCulture, _monetaryCulture, _numericCulture;
-        private CodeContext _defaultContext, _defaultClsContext;
+        private readonly CodeContext _defaultContext, _defaultClsContext;
         private readonly TopNamespaceTracker _topNamespace;
         private readonly IEqualityComparer<object> _equalityComparer;
         private readonly IEqualityComparer _equalityComparerNonGeneric;
@@ -245,9 +246,7 @@ namespace IronPython.Runtime {
             CodeContext defaultClsContext = DefaultContext.CreateDefaultCLSContext(this);
             _defaultClsContext = defaultClsContext;
 
-            if (DefaultContext._default == null) {
-                DefaultContext.InitializeDefaults(_defaultContext, defaultClsContext);
-            }
+            DefaultContext.InitializeDefaults(_defaultContext, defaultClsContext);
 
             InitializeBuiltins();
 
@@ -338,6 +337,16 @@ namespace IronPython.Runtime {
             manager.AssemblyLoaded += new EventHandler<AssemblyLoadedEventArgs>(ManagerAssemblyLoaded);
 
             _mainThreadFunctionStack = Runtime.Operations.PythonOps.GetFunctionStack();
+        }
+
+        public override void Done() {
+            Console.WriteLine("Done called");
+            DefaultContext._default = null;
+            DefaultContext._defaultCLS = null;
+            PythonExceptions.Done();
+            TypeCache.Done();
+            PythonType.Done();
+            
         }
 
         void ManagerAssemblyLoaded(object sender, AssemblyLoadedEventArgs e) {
@@ -466,6 +475,8 @@ namespace IronPython.Runtime {
         internal readonly HashDelegate StringHasher;
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
         internal readonly HashDelegate FallbackHasher;
+
+        internal PythonExtensionBinder emptyExtensionBinder;
 
         private int InitialHasherImpl(object o, ref HashDelegate dlg) {
             if (o == null) {

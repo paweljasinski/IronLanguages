@@ -50,6 +50,9 @@ namespace Microsoft.Scripting.Runtime {
             _domainManager = domainManager;
             _id = domainManager.GenerateContextId();
         }
+
+        public virtual void Done() { }
+
        
         /// <summary>
         /// Provides the ContextId which includes members that should only be shown for this LanguageContext.
