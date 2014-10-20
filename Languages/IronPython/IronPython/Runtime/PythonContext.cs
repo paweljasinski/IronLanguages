@@ -246,7 +246,9 @@ namespace IronPython.Runtime {
             CodeContext defaultClsContext = DefaultContext.CreateDefaultCLSContext(this);
             _defaultClsContext = defaultClsContext;
 
-            DefaultContext.InitializeDefaults(_defaultContext, defaultClsContext);
+            if (DefaultContext._default == null) {
+                DefaultContext.InitializeDefaults(_defaultContext, defaultClsContext);
+            }
 
             InitializeBuiltins();
 
@@ -340,13 +342,9 @@ namespace IronPython.Runtime {
         }
 
         public override void Done() {
-            Console.WriteLine("Done called");
-            DefaultContext._default = null;
-            DefaultContext._defaultCLS = null;
             PythonExceptions.Done();
             TypeCache.Done();
             PythonType.Done();
-            
         }
 
         void ManagerAssemblyLoaded(object sender, AssemblyLoadedEventArgs e) {

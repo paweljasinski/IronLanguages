@@ -62,7 +62,6 @@ namespace IronPython.Modules {
         public static void DoneDoneDone() {
             CallableProxyType = null;
             ProxyType = null;
-            // ReferenceType = null;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
@@ -70,7 +69,7 @@ namespace IronPython.Modules {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
         public static PythonType ProxyType = DynamicHelpers.GetPythonTypeFromType(typeof(weakproxy));
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
-        public static PythonType ReferenceType = DynamicHelpers.GetPythonTypeFromType(typeof(@ref));
+        public static readonly PythonType ReferenceType = DynamicHelpers.GetPythonTypeFromType(typeof(@ref));
 
         [PythonType]
         public class @ref : IStructuralEquatable

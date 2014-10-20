@@ -122,13 +122,10 @@ type(name, bases, dict) -> creates a new type instance with the given name, base
 
         public static void Done() {
             _pythonTypes.Clear();
-            // __dict__ = null;
-            // _pythonTypeType = null;
-
         }
 
         /// <summary>
-        /// __reates a new type for a user defined type.  The name, base classes (a tuple of type
+        /// Creates a new type for a user defined type.  The name, base classes (a tuple of type
         /// objects), and a dictionary of members is provided.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]

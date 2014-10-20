@@ -38,32 +38,17 @@ to Zip archives.";
 
             dict["_zip_directory_cache"] = context.GetModuleState(_zip_directory_cache_key);
 
-            // context.EnsureModuleException("socketherror", socketErr, dict, "herror", "socket");
             context.EnsureModuleException("zipimport.ZipImportError", PythonExceptions.ImportError,
                 typeof(PythonExceptions.BaseException),
                 dict, "ZipImportError", "zipimport",
                 msg => new ImportException(msg));
-
-            // InitModuleExceptions(context, dict);
         }
 
-        // public static PythonType ZipImportError;
         internal static Exception MakeError(CodeContext context, params object[] args) {
 
             var zie = (PythonType)PythonContext.GetContext(context).GetModuleState("zipimport.ZipImportError");
             return PythonOps.CreateThrowable(zie, args);
         }
-
-        //private static void InitModuleExceptions(PythonContext context,
-        //    PythonDictionary dict) {
-        //    ZipImportError = context.EnsureModuleException(
-        //        "zipimport.ZipImportError",
-        //        PythonExceptions.ImportError,
-        //        typeof(PythonExceptions.BaseException),
-        //        dict, "ZipImportError", "zipimport",
-        //        msg => new ImportException(msg));
-        //}
-
 
         [PythonType]
         public class zipimporter {

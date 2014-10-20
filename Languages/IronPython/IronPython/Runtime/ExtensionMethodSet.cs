@@ -57,10 +57,6 @@ namespace IronPython.Runtime {
             }
         }
 
-        private ExtensionMethodSet() {
-            _loadedAssemblies = new Dictionary<Assembly, AssemblyLoadInfo>();
-        }
-
         public BindingRestrictions GetRestriction(Expression codeContext) {
             BindingRestrictions extCheck;
             if (_id == ExtensionMethodSet.OutOfIds) {
@@ -81,6 +77,10 @@ namespace IronPython.Runtime {
                 );
             }
             return extCheck;
+        }
+
+        private ExtensionMethodSet() {
+            _loadedAssemblies = new Dictionary<Assembly, AssemblyLoadInfo>();
         }
 
         /// <summary>
