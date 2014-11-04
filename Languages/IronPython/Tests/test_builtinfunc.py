@@ -432,8 +432,8 @@ def test_dir():
         
         from System.Dynamic import ExpandoObject
         eo = ExpandoObject()
-        eo.bill = 5
-        Assert('bill' in dir(eo))
+        #eo.bill = 5
+        #Assert('bill' in dir(eo))
 
     
 def test_ord():
