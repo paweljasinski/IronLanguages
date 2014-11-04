@@ -461,7 +461,10 @@ def test_paramrefs():
     import System
     x = run_help(System.DateTime.Parse)
     
-    Assert(x.find("An object that is equivalent to the date and time contained in s") != -1)
+    # this matches .net 4.0 and .net 4.5
+    # Assert(x.find("An object that is equivalent to the date and time contained in s") != -1)
+    # this matches .net 3.5 and is what I get in my dev environment
+    Assert(x.find("A System.DateTime equivalent to the date and time contained in s.") != -1)
 
 @skip("silverlight") #http://ironpython.codeplex.com/WorkItem/View.aspx?WorkItemId=20236#
 def test_type():        
