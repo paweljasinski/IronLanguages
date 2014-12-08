@@ -1,4 +1,4 @@
-﻿#if !WIN8
+#if !WIN8
 using System;
 using System.Collections.Generic;
 using System.IO;
