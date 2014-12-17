@@ -15,6 +15,7 @@
   <!-- Signing -->
   <PropertyGroup>
     <PublicKey>$(SolutionDir)\Key.snk</PublicKey>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <PropertyGroup Condition="Exists('$(PublicKey)') and '$(AssemblyOriginatorKeyFile)'==''">
