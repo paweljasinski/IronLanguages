@@ -59,4 +59,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)Versioning.targets" />
   <Target Name="BeforeBuild" DependsOnTargets="GenerateBuildInfo" />
+  <PropertyGroup>
+    <PreBuildEvent>$(ProjectDir)..\..\..\Scripts\Bat\CopyIfNewer.bat $(ProjectDir)..\App.config.$(ConfigurationFlavor) $(ProjectDir)..\App.config</PreBuildEvent>
+  </PropertyGroup>
 </Project>
