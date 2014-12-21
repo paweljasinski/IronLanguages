@@ -11,6 +11,7 @@
     <ApplicationIcon>ipy.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>IronPythonWindow.ruleset</CodeAnalysisRuleSet>
+    <AppConfig>..\$(ConfigurationFlavor).config</AppConfig>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'FxCop|AnyCPU' ">
   </PropertyGroup>
@@ -23,12 +24,6 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'v2Release|AnyCPU' ">
   </PropertyGroup>
 
-  <Target Name="CopyAppConfig">
-    <Copy
-      SourceFiles="$(ProjectDir)..\App.config.$(ConfigurationFlavor)"
-      DestinationFiles="$(ProjectDir)App.config"
-      SkipUnchangedFiles="true"/>
-  </Target>
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
@@ -63,15 +58,15 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-  <!--
-    <None Include="..\App.config">
-      <Link>App.config</Link>
+    <None Include="..\Debug.config">
+      <Link>Debug.config</Link>
     </None>
-  -->
+    <None Include="..\Release.config">
+      <Link>Release.config</Link>
+    </None>
     <None Include="IronPythonWindow.ruleset" />
-    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)Versioning.targets" />
-  <Target Name="BeforeBuild" DependsOnTargets="CopyAppConfig;GenerateBuildInfo" />
+  <Target Name="BeforeBuild" DependsOnTargets="GenerateBuildInfo" />
 </Project>
