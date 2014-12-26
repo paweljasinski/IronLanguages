@@ -1051,17 +1051,17 @@ namespace Microsoft.Scripting.Actions.Calls {
         }
 
         private ErrorInfo MakeCallFailureError(BindingTarget target) {
-            foreach (CallFailure cf in target.CallFailures) {
+            var collector = new List<string>();
+            var cfCount = target.CallFailures.Count;
+            CallFailure[] cfArray = new CallFailure[cfCount];
+            target.CallFailures.CopyTo(cfArray, 0);
+            for (int i = cfCount - 1; i >= 0; i--) {
+                var cf = cfArray[i];
                 switch (cf.Reason) {
                     case CallFailureReason.ConversionFailure:
                         foreach (ConversionResult cr in cf.ConversionResults) {
                             if (cr.Failed) {
-                                return ErrorInfo.FromException(
-                                    Ast.Call(
-                                        typeof(BinderOps).GetMethod("SimpleTypeError"),
-                                        AstUtils.Constant(String.Format("expected {0}, got {1}", _binder.GetTypeName(cr.To), cr.GetArgumentTypeName(_binder)))
-                                    )
-                                );
+                                collector.Add(String.Format("expected {0}, got {1}", _binder.GetTypeName(cr.To), cr.GetArgumentTypeName(_binder)));
                             }
                         }
                         break;
@@ -1090,6 +1090,15 @@ namespace Microsoft.Scripting.Actions.Calls {
                         );
                     default: throw new InvalidOperationException();
                 }
+            }
+
+            if (collector.Count > 0) {
+                return ErrorInfo.FromException(
+                        Ast.Call(
+                            typeof(BinderOps).GetMethod("SimpleTypeError"),AstUtils.Constant(String.Join("\n", collector.ToArray()))
+                        )
+                    );
+
             }
             throw new InvalidOperationException();
         }
