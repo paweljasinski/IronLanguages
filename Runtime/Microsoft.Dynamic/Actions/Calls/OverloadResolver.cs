@@ -518,7 +518,7 @@ namespace Microsoft.Scripting.Actions.Calls {
             if (!success) {
                 var conversionResults = new ConversionResult[_actualArguments.Count];
                 for (int i = 0; i < _actualArguments.Count; i++) {
-                    conversionResults[i] = new ConversionResult(_actualArguments[i].Value, _actualArguments[i].GetLimitType(), candidate.GetParameter(i, namesBinding).Type, !hasConversion[i], i);
+                    conversionResults[i] = new ConversionResult(_actualArguments[i].Value, _actualArguments[i].GetLimitType(), candidate.GetParameter(i, namesBinding).Type, !hasConversion[i]);
                 }
                 failure = new CallFailure(candidate, conversionResults);
             } else {
@@ -540,7 +540,7 @@ namespace Microsoft.Scripting.Actions.Calls {
                 Type argType = CompilerHelpers.GetType(value);
 
                 if (!CanConvertFrom(argType, null, parameter, narrowingLevel)) {
-                    failure = new CallFailure(candidate, new[] { new ConversionResult(value, argType, parameter.Type, false, i) });
+                    failure = new CallFailure(candidate, new[] { new ConversionResult(value, argType, parameter.Type, false) });
                     return false;
                 }
             }
@@ -1059,10 +1059,12 @@ namespace Microsoft.Scripting.Actions.Calls {
                 var cf = cfArray[i];
                 switch (cf.Reason) {
                     case CallFailureReason.ConversionFailure:
+                        int j = 0;
                         foreach (ConversionResult cr in cf.ConversionResults) {
                             if (cr.Failed) {
-                                collector.Add(String.Format("expected {0}, got {1}, at arg: {2}", _binder.GetTypeName(cr.To), cr.GetArgumentTypeName(_binder), cr.argPosition));
+                                collector.Add(String.Format("expected {0}, got {1}, at arg: {2}", _binder.GetTypeName(cr.To), cr.GetArgumentTypeName(_binder), j));
                             }
+                            j++;
                         }
                         break;
                     case CallFailureReason.DuplicateKeyword:
