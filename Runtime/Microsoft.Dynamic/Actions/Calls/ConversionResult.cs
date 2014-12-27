@@ -28,12 +28,14 @@ namespace Microsoft.Scripting.Actions.Calls {
         private readonly Type _argType;
         private readonly Type _toType;
         private readonly bool _failed;
+        private readonly int _argPosition;
 
-        internal ConversionResult(object arg, Type argType, Type toType, bool failed) {
+        internal ConversionResult(object arg, Type argType, Type toType, bool failed, int argPosition) {
             _arg = arg;
             _argType = argType;
             _toType = toType;
             _failed = failed;
+            _argPosition = argPosition;
         }
 
         /// <summary>
@@ -59,10 +61,13 @@ namespace Microsoft.Scripting.Actions.Calls {
             get { return _failed; }
         }
 
+        public int argPosition {
+            get { return _argPosition; }
+        }
         internal static void ReplaceLastFailure(IList<ConversionResult> failures, bool isFailure) {
             ConversionResult failure = failures[failures.Count - 1];
             failures.RemoveAt(failures.Count - 1);
-            failures.Add(new ConversionResult(failure.Arg, failure.ArgType, failure.To, isFailure));
+            failures.Add(new ConversionResult(failure.Arg, failure.ArgType, failure.To, isFailure, failure.argPosition));
         }
 
         public string GetArgumentTypeName(ActionBinder binder) {
